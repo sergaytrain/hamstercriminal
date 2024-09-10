@@ -51,7 +51,7 @@
 
     <div id="upgrades">
         <h2>Обгрейды:</h2>
-        <button id="upgrade-btn" onclick="buyUpgrade()">Щавельский + 2 тапа (20 коинов)</button>
+        <button id="upgrade-btn" onclick="buyUpgrade()">Щавельский + 5 тапа (100 коинов)</button>
     </div>
 
     <script>
@@ -72,7 +72,7 @@
         function buyUpgrade() {
             if (money >= upgradeCost) {
                 money -= upgradeCost;
-                tapValue += 2;
+                tapValue += 100;
                 experience += 5; // бонус за покупку
                 updateDisplay();
                 alert("Вы купили обгрейд! Теперь у вас " + tapValue + " тапа(ов).");
