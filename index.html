@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamster Combat</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5af19, #f12711);
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+        }
+        #user-name {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 24px;
+        }
+        #coin-image {
+            width: 100px;
+            height: 100px;
+            margin: 20px;
+        }
+        #upgrades {
+            margin-top: 20px;
+        }
+        #upgrade-btn {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="user-name">Пользователь: МеллКаллСтрой</div>
+    <h1>Hamster Combat</h1>
+    <img id="coin-image" src="hamstercoin.webp" alt="Hamster Coin">
+    <div>
+        <p>Деньги: <span id="money">0</span></p>
+        <p>Опыт: <span id="experience">0</span></p>
+    </div>
+
+    <div id="upgrades">
+        <h2>Обгрейды:</h2>
+        <button id="upgrade-btn" onclick="buyUpgrade()">Щавельский + 2 тапа (20 коинов)</button>
+    </div>
+
+    <script>
+        // Получение сохраненных данных из localStorage или установка значений по умолчанию
+        let money = Number(localStorage.getItem('money')) || 0;
+        let experience = Number(localStorage.getItem('experience')) || 0;
+        let tapValue = Number(localStorage.getItem('tapValue')) || 1;
+        const upgradeCost = 20;
+
+        function updateDisplay() {
+            document.getElementById('money').innerText = money;
+            document.getElementById('experience').innerText = experience;
+            localStorage.setItem('money', money);
+            localStorage.setItem('experience', experience);
+            localStorage.setItem('tapValue', tapValue);
+        }
+
+        function buyUpgrade() {
+            if (money >= upgradeCost) {
+                money -= upgradeCost;
+                tapValue += 2;
+                experience += 5; // бонус за покупку
+                updateDisplay();
+                alert("Вы купили обгрейд! Теперь у вас " + tapValue + " тапа(ов).");
+            } else {
+                alert("Недостаточно денег!");
+            }
+        }
+
+        // Для тестирования, добавляем функцию для получения денег при нажатии
+        document.body.addEventListener('click', () => {
+            money += tapValue;
+            updateDisplay();
+        });
+
+        updateDisplay();
+    </script>
+
+</body>
+</html>
