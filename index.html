@@ -50,12 +50,13 @@
             flex-direction: column;
             align-items: flex-start;
             gap: 5px;
-            z-index: 1000;
         }
         
         #username {
             color: var(--telegram);
             font-weight: bold;
+            cursor: pointer;
+            text-decoration: underline;
         }
         
         #guest-warning {
@@ -95,7 +96,6 @@
             border: 2px solid var(--primary);
             position: relative;
             overflow: hidden;
-            margin-bottom: 30px;
         }
         
         .game-container::before {
@@ -225,266 +225,6 @@
             100% { transform: translateX(100%) rotate(30deg); }
         }
         
-        .games-section {
-            width: 100%;
-            max-width: 800px;
-            margin-top: 30px;
-        }
-        
-        .games-section h2 {
-            color: var(--primary);
-            font-family: 'Press Start 2P', cursive;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .game-card {
-            background: rgba(40, 40, 40, 0.8);
-            border-radius: 10px;
-            padding: 20px;
-            border: 1px solid rgba(255, 149, 0, 0.3);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            border-color: var(--primary);
-        }
-        
-        .game-card h3 {
-            color: var(--secondary);
-            margin-bottom: 10px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 1rem;
-        }
-        
-        .game-card p {
-            color: var(--light);
-            opacity: 0.8;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-        
-        .game-card .play-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .game-card .play-btn:hover {
-            background: var(--secondary);
-            color: var(--dark);
-        }
-        
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        
-        .modal-content {
-            background: var(--dark);
-            border-radius: 15px;
-            padding: 30px;
-            width: 100%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 30px rgba(255, 149, 0, 0.5);
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 24px;
-            color: var(--light);
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-        
-        .close-modal:hover {
-            color: var(--accent);
-        }
-        
-        /* Стили для игры "Соревнование" */
-        .competition-game {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .bet-controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .bet-controls input {
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            width: 150px;
-            text-align: center;
-            font-size: 16px;
-        }
-        
-        .bet-controls button {
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .leaderboard {
-            margin-top: 20px;
-            border: 1px solid rgba(255, 149, 0, 0.3);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .leaderboard-header {
-            background: rgba(255, 149, 0, 0.2);
-            padding: 10px;
-            font-weight: bold;
-            display: grid;
-            grid-template-columns: 50px 1fr 100px;
-            gap: 10px;
-        }
-        
-        .leaderboard-row {
-            display: grid;
-            grid-template-columns: 50px 1fr 100px;
-            gap: 10px;
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .leaderboard-row:nth-child(even) {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .leaderboard-row .rank {
-            font-weight: bold;
-            color: var(--secondary);
-        }
-        
-        .leaderboard-row .username {
-            text-align: left;
-        }
-        
-        .leaderboard-row .bet {
-            text-align: right;
-        }
-        
-        /* Стили для игры "Взорви и выиграй" */
-        .bomb-game {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .bomb-grid {
-            display: grid;
-            grid-template-columns: repeat(20, 1fr);
-            gap: 2px;
-            margin: 0 auto;
-            max-width: 600px;
-        }
-        
-        .bomb-cell {
-            aspect-ratio: 1/1;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 10px;
-        }
-        
-        .bomb-cell:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .bomb-cell.selected {
-            background: var(--success);
-        }
-        
-        .bomb-cell.bomb {
-            background: var(--accent);
-            animation: bombPulse 0.5s infinite alternate;
-        }
-        
-        @keyframes bombPulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
-        }
-        
-        .bomb-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .bomb-controls input {
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            width: 200px;
-            text-align: center;
-            font-size: 16px;
-        }
-        
-        .bomb-controls button {
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .bomb-status {
-            margin-top: 10px;
-            font-weight: bold;
-            color: var(--secondary);
-        }
-        
         .click-effect {
             position: absolute;
             width: 30px;
@@ -556,10 +296,6 @@
             #guest-warning {
                 font-size: 8px;
             }
-            
-            .bomb-grid {
-                grid-template-columns: repeat(10, 1fr);
-            }
         }
     </style>
 </head>
@@ -600,31 +336,6 @@
         </div>
     </div>
     
-    <div class="games-section">
-        <h2>ИГРЫ</h2>
-        <div class="games-grid">
-            <div class="game-card" onclick="openGameModal('competition')">
-                <h3>Соревнование</h3>
-                <p>Сделайте ставку и соревнуйтесь с другими игроками. Кто поставит больше - тот выиграет!</p>
-                <button class="play-btn">Играть</button>
-            </div>
-            
-            <div class="game-card" onclick="openGameModal('bomb')">
-                <h3>Взорви и выиграй</h3>
-                <p>Сделайте ставку, поставьте бомбу и надейтесь, что соперник не угадает её расположение!</p>
-                <button class="play-btn">Играть</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Модальное окно для игр -->
-    <div id="game-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeGameModal()">&times;</button>
-            <div id="modal-game-content"></div>
-        </div>
-    </div>
-    
     <div id="notification" class="notification"></div>
 
     <script>
@@ -644,26 +355,6 @@
         const usernameElement = document.getElementById('username');
         const guestWarning = document.getElementById('guest-warning');
         const tgLoginBtn = document.getElementById('tg-login-btn');
-        const gameModal = document.getElementById('game-modal');
-        const modalGameContent = document.getElementById('modal-game-content');
-        
-        // Данные для игр
-        const competitionPlayers = [
-            { username: "@hamster_king", bet: 1500 },
-            { username: "@golden_rat", bet: 1200 },
-            { username: "@cheese_lover", bet: 900 },
-            { username: "@wheel_runner", bet: 750 },
-            { username: "@tiny_paws", bet: 600 }
-        ];
-        
-        let bombGameState = {
-            betAmount: 0,
-            bombPosition: null,
-            playerPosition: null,
-            gameStarted: false,
-            gameFinished: false,
-            winner: null
-        };
         
         // Проверяем, открыто ли в Telegram WebApp
         function initTelegram() {
@@ -672,8 +363,16 @@
                 isTelegramUser = true;
                 
                 // Показываем username пользователя
-                usernameElement.textContent = '@' + (user.username || `${user.first_name}${user.last_name ? ' ' + user.last_name : ''}`);
+                const username = user.username || `${user.first_name}${user.last_name ? ' ' + user.last_name : ''}`;
+                usernameElement.textContent = '@' + username;
                 usernameElement.style.color = 'var(--telegram)';
+                
+                // Добавляем обработчик клика для перехода на профиль Telegram
+                usernameElement.addEventListener('click', () => {
+                    if (user.username) {
+                        window.open(`https://telegram.org/${user.username}`, '_blank');
+                    }
+                });
                 
                 // Скрываем предупреждение и кнопку входа
                 guestWarning.style.display = 'none';
@@ -795,201 +494,6 @@
             } else {
                 showNotification("Недостаточно коинов!");
             }
-        }
-        
-        // Функции для работы с модальными окнами игр
-        function openGameModal(gameType) {
-            modalGameContent.innerHTML = '';
-            
-            if (gameType === 'competition') {
-                renderCompetitionGame();
-            } else if (gameType === 'bomb') {
-                renderBombGame();
-            }
-            
-            gameModal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeGameModal() {
-            gameModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        
-        // Рендер игры "Соревнование"
-        function renderCompetitionGame() {
-            const gameHTML = `
-                <div class="competition-game">
-                    <h2>Соревнование</h2>
-                    <p>Сделайте ставку и соревнуйтесь с другими игроками. Чем выше ваша ставка, тем выше вы в рейтинге!</p>
-                    
-                    <div class="bet-controls">
-                        <input type="number" id="competition-bet" placeholder="Сумма ставки" min="10" value="100">
-                        <button onclick="placeCompetitionBet()">Сделать ставку</button>
-                    </div>
-                    
-                    <h3>Рейтинг игроков</h3>
-                    <div class="leaderboard">
-                        <div class="leaderboard-header">
-                            <div>#</div>
-                            <div>Игрок</div>
-                            <div>Ставка</div>
-                        </div>
-                        ${competitionPlayers.map((player, index) => `
-                            <div class="leaderboard-row">
-                                <div class="rank">${index + 1}</div>
-                                <div class="username">${player.username}</div>
-                                <div class="bet">${player.bet}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-            
-            modalGameContent.innerHTML = gameHTML;
-        }
-        
-        function placeCompetitionBet() {
-            const betInput = document.getElementById('competition-bet');
-            const betAmount = parseInt(betInput.value);
-            
-            if (isNaN(betAmount) || betAmount < 10) {
-                showNotification("Минимальная ставка - 10 коинов");
-                return;
-            }
-            
-            if (betAmount > money) {
-                showNotification("Недостаточно коинов для такой ставки");
-                return;
-            }
-            
-            money -= betAmount;
-            updateDisplay();
-            
-            // В реальном приложении здесь будет отправка ставки на сервер
-            showNotification(`Ставка ${betAmount} коинов принята!`);
-            
-            // Добавляем игрока в рейтинг (в реальном приложении это будет приходить с сервера)
-            const username = isTelegramUser ? 
-                `@${tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name}` : 
-                "Guest";
-            
-            competitionPlayers.push({ username, bet: betAmount });
-            competitionPlayers.sort((a, b) => b.bet - a.bet);
-            
-            // Обновляем рейтинг
-            renderCompetitionGame();
-        }
-        
-        // Рендер игры "Взорви и выиграй"
-        function renderBombGame() {
-            const gameHTML = `
-                <div class="bomb-game">
-                    <h2>Взорви и выиграй</h2>
-                    <p>Сделайте ставку, поставьте бомбу и надейтесь, что соперник не угадает её расположение!</p>
-                    
-                    ${bombGameState.gameStarted && !bombGameState.gameFinished ? `
-                        <p>Ожидаем ход соперника...</p>
-                    ` : bombGameState.gameFinished ? `
-                        <p>Игра завершена! ${bombGameState.winner === 'player' ? 'Вы выиграли!' : 'Вы проиграли!'}</p>
-                    ` : ''}
-                    
-                    ${!bombGameState.gameStarted ? `
-                        <div class="bomb-controls">
-                            <input type="number" id="bomb-bet" placeholder="Сумма ставки" min="10" value="100">
-                            <button onclick="startBombGame()">Начать игру</button>
-                        </div>
-                    ` : ''}
-                    
-                    ${bombGameState.gameStarted && !bombGameState.gameFinished ? `
-                        <div class="bomb-grid" id="bomb-grid">
-                            ${Array(400).fill(0).map((_, index) => `
-                                <div class="bomb-cell" data-index="${index}" onclick="selectBombCell(${index})"></div>
-                            `).join('')}
-                        </div>
-                        <div class="bomb-status" id="bomb-status"></div>
-                    ` : ''}
-                    
-                    ${bombGameState.gameFinished ? `
-                        <button onclick="resetBombGame()">Играть снова</button>
-                    ` : ''}
-                </div>
-            `;
-            
-            modalGameContent.innerHTML = gameHTML;
-        }
-        
-        function startBombGame() {
-            const betInput = document.getElementById('bomb-bet');
-            const betAmount = parseInt(betInput.value);
-            
-            if (isNaN(betAmount) || betAmount < 10) {
-                showNotification("Минимальная ставка - 10 коинов");
-                return;
-            }
-            
-            if (betAmount > money) {
-                showNotification("Недостаточно коинов для такой ставки");
-                return;
-            }
-            
-            money -= betAmount;
-            updateDisplay();
-            
-            bombGameState = {
-                betAmount,
-                bombPosition: Math.floor(Math.random() * 400),
-                playerPosition: null,
-                gameStarted: true,
-                gameFinished: false,
-                winner: null
-            };
-            
-            renderBombGame();
-            showNotification(`Игра началась! Ставка: ${betAmount} коинов`);
-        }
-        
-        function selectBombCell(index) {
-            if (bombGameState.gameFinished || !bombGameState.gameStarted) return;
-            
-            const cell = document.querySelector(`.bomb-cell[data-index="${index}"]`);
-            cell.classList.add('selected');
-            
-            if (index === bombGameState.bombPosition) {
-                // Игрок нашел бомбу - проиграл
-                cell.classList.add('bomb');
-                bombGameState.gameFinished = true;
-                bombGameState.winner = 'opponent';
-                
-                showNotification("Вы нашли бомбу и проиграли!");
-            } else {
-                // Игрок не нашел бомбу - выиграл
-                bombGameState.gameFinished = true;
-                bombGameState.winner = 'player';
-                money += bombGameState.betAmount * 2;
-                updateDisplay();
-                
-                showNotification(`Вы выиграли ${bombGameState.betAmount * 2} коинов!`);
-            }
-            
-            // Показываем где была бомба
-            const bombCell = document.querySelector(`.bomb-cell[data-index="${bombGameState.bombPosition}"]`);
-            if (bombCell) bombCell.classList.add('bomb');
-            
-            renderBombGame();
-        }
-        
-        function resetBombGame() {
-            bombGameState = {
-                betAmount: 0,
-                bombPosition: null,
-                playerPosition: null,
-                gameStarted: false,
-                gameFinished: false,
-                winner: null
-            };
-            
-            renderBombGame();
         }
         
         // Обработчик входа через Telegram
