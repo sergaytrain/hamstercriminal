@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hamster Combat</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,6 +14,7 @@
             --light: #F5F5F5;
             --accent: #FF3B30;
             --success: #34C759;
+            --telegram: #0088CC;
         }
         
         * {
@@ -36,7 +38,7 @@
             padding: 20px;
         }
         
-        #user-name {
+        #user-info {
             position: fixed;
             top: 15px;
             left: 20px;
@@ -44,6 +46,25 @@
             color: var(--secondary);
             font-family: 'Press Start 2P', cursive;
             text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+        
+        #username {
+            color: var(--telegram);
+            font-weight: bold;
+        }
+        
+        #guest-warning {
+            font-size: 10px;
+            color: var(--accent);
+            font-family: 'Roboto', sans-serif;
+            max-width: 200px;
+            text-align: left;
+            margin-top: 5px;
+            opacity: 0.8;
         }
         
         .header {
@@ -257,6 +278,24 @@
             transform: translateX(0);
         }
         
+        .tg-login-btn {
+            background: var(--telegram);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tg-login-btn:hover {
+            opacity: 0.9;
+        }
+        
         @media (max-width: 600px) {
             h1 {
                 font-size: 1.8rem;
@@ -266,17 +305,30 @@
                 padding: 20px;
             }
             
-            #user-name {
+            #user-info {
                 font-size: 12px;
                 top: 10px;
                 left: 10px;
+            }
+            
+            #guest-warning {
+                font-size: 8px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div id="user-name">Игрок: МеллКаллСтрой</div>
+    <div id="user-info">
+        <div>Игрок: <span id="username">Guest</span></div>
+        <div id="guest-warning">Прогресс не будет сохраняться до входа через Telegram</div>
+        <button id="tg-login-btn" class="tg-login-btn" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.426 1.426 0 0 0-.013-.315.337.337 0 0 0-.114-.217.526.526 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09z"/>
+            </svg>
+            Войти через Telegram
+        </button>
+    </div>
     
     <div class="header">
         <h1>HAMSTER COMBAT</h1>
@@ -309,22 +361,117 @@
     <div id="notification" class="notification"></div>
 
     <script>
-        // Получение сохраненных данных из localStorage или установка значений по умолчанию
-        let money = Number(localStorage.getItem('money')) || 0;
-        let experience = Number(localStorage.getItem('experience')) || 0;
-        let tapValue = Number(localStorage.getItem('tapValue')) || 1;
+        // Инициализация Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        let isTelegramUser = false;
+        
+        // Данные игры
+        let money = 0;
+        let experience = 0;
+        let tapValue = 1;
         const upgradeCost = 100;
         
         // Элементы DOM
         const coinImage = document.getElementById('coin-image');
         const notification = document.getElementById('notification');
+        const usernameElement = document.getElementById('username');
+        const guestWarning = document.getElementById('guest-warning');
+        const tgLoginBtn = document.getElementById('tg-login-btn');
+        
+        // Проверяем, открыто ли в Telegram WebApp
+        function initTelegram() {
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const user = tg.initDataUnsafe.user;
+                isTelegramUser = true;
+                
+                // Показываем username пользователя
+                usernameElement.textContent = '@' + (user.username || `${user.first_name}${user.last_name ? ' ' + user.last_name : ''}`);
+                usernameElement.style.color = 'var(--telegram)';
+                
+                // Скрываем предупреждение и кнопку входа
+                guestWarning.style.display = 'none';
+                tgLoginBtn.style.display = 'none';
+                
+                // Загружаем данные из Telegram Cloud
+                loadGameData();
+                
+                // Разворачиваем приложение на весь экран
+                tg.expand();
+            } else {
+                // Не в Telegram - гостевой режим
+                isTelegramUser = false;
+                usernameElement.textContent = 'Guest';
+                usernameElement.style.color = 'var(--accent)';
+                guestWarning.style.display = 'block';
+                tgLoginBtn.style.display = 'flex';
+                
+                // Загружаем из localStorage
+                loadLocalData();
+            }
+        }
+        
+        // Загрузка данных из Telegram Cloud
+        function loadGameData() {
+            // Здесь должна быть реализация загрузки данных из вашего бота
+            // Временно используем localStorage для демонстрации
+            const savedData = localStorage.getItem(`tg_${tg.initDataUnsafe.user.id}_gameData`);
+            
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    money = data.money || 0;
+                    experience = data.experience || 0;
+                    tapValue = data.tapValue || 1;
+                } catch (e) {
+                    console.error('Error parsing saved data', e);
+                }
+            }
+            
+            updateDisplay();
+        }
+        
+        // Сохранение данных в Telegram Cloud
+        function saveGameData() {
+            if (!isTelegramUser) return;
+            
+            const data = {
+                money,
+                experience,
+                tapValue,
+                lastSave: new Date().toISOString()
+            };
+            
+            // Здесь должна быть реализация сохранения данных в вашем боте
+            // Временно используем localStorage для демонстрации
+            localStorage.setItem(`tg_${tg.initDataUnsafe.user.id}_gameData`, JSON.stringify(data));
+        }
+        
+        // Загрузка локальных данных (для гостевого режима)
+        function loadLocalData() {
+            money = Number(localStorage.getItem('money')) || 0;
+            experience = Number(localStorage.getItem('experience')) || 0;
+            tapValue = Number(localStorage.getItem('tapValue')) || 1;
+            updateDisplay();
+        }
+        
+        // Сохранение локальных данных (для гостевого режима)
+        function saveLocalData() {
+            if (isTelegramUser) return;
+            
+            localStorage.setItem('money', money);
+            localStorage.setItem('experience', experience);
+            localStorage.setItem('tapValue', tapValue);
+        }
         
         function updateDisplay() {
             document.getElementById('money').innerText = Math.floor(money);
             document.getElementById('experience').innerText = Math.floor(experience);
-            localStorage.setItem('money', money);
-            localStorage.setItem('experience', experience);
-            localStorage.setItem('tapValue', tapValue);
+            
+            if (isTelegramUser) {
+                saveGameData();
+            } else {
+                saveLocalData();
+            }
             
             // Обновляем текст кнопки с текущей стоимостью
             document.getElementById('upgrade-btn').innerText = 
@@ -363,6 +510,13 @@
             }
         }
         
+        // Обработчик входа через Telegram
+        tgLoginBtn.addEventListener('click', () => {
+            showNotification("Откройте игру через Telegram бота для сохранения прогресса");
+            // В реальном приложении здесь будет редирект на бота
+            // window.location.href = 'https://t.me/your_bot?start=game';
+        });
+        
         // Обработчик клика по монетке
         coinImage.addEventListener('click', (e) => {
             money += tapValue;
@@ -386,15 +540,8 @@
             }
         });
         
-        // Инициализация
-        updateDisplay();
-        
-        // Авто-кликер (для демонстрации)
-        // setInterval(() => {
-        //     money += tapValue / 10;
-        //     experience += 0.01;
-        //     updateDisplay();
-        // }, 1000);
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', initTelegram);
     </script>
 
 </body>
