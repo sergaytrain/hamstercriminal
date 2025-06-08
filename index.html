@@ -6,6 +6,30 @@
     <title>Hamster Combat</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            alert('Просмотр кода запрещен!');
+        });
+
+        document.addEventListener('keydown', function(e) {
+            // Блокировка Ctrl+U (просмотр исходного кода)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+                alert('Просмотр кода запрещен!');
+            }
+            // Блокировка Ctrl+Shift+I (открытие DevTools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+                alert('Просмотр кода запрещен!');
+            }
+            // Блокировка F12 (открытие DevTools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+                alert('Просмотр кода запрещен!');
+            }
+        });
+    </script>
     <style>
         :root {
             --primary: #FF9500;
