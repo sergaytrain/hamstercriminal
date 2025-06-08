@@ -347,7 +347,8 @@
         let money = 0;
         let experience = 0;
         let tapValue = 1;
-        const upgradeCost = 100;
+        let upgradeCost = 100;
+        let isAdvancedUpgrade = false;
         
         // Элементы DOM
         const coinImage = document.getElementById('coin-image');
@@ -355,6 +356,7 @@
         const usernameElement = document.getElementById('username');
         const guestWarning = document.getElementById('guest-warning');
         const tgLoginBtn = document.getElementById('tg-login-btn');
+        const upgradeBtn = document.getElementById('upgrade-btn');
         
         // Проверяем, открыто ли в Telegram WebApp
         function initTelegram() {
@@ -408,6 +410,8 @@
                     money = data.money || 0;
                     experience = data.experience || 0;
                     tapValue = data.tapValue || 1;
+                    isAdvancedUpgrade = data.isAdvancedUpgrade || false;
+                    upgradeCost = data.upgradeCost || (isAdvancedUpgrade ? 10000 : 100);
                 } catch (e) {
                     console.error('Error parsing saved data', e);
                 }
@@ -424,6 +428,8 @@
                 money,
                 experience,
                 tapValue,
+                isAdvancedUpgrade,
+                upgradeCost,
                 lastSave: new Date().toISOString()
             };
             
@@ -437,6 +443,8 @@
             money = Number(localStorage.getItem('money')) || 0;
             experience = Number(localStorage.getItem('experience')) || 0;
             tapValue = Number(localStorage.getItem('tapValue')) || 1;
+            isAdvancedUpgrade = localStorage.getItem('isAdvancedUpgrade') === 'true' || false;
+            upgradeCost = Number(localStorage.getItem('upgradeCost')) || (isAdvancedUpgrade ? 10000 : 100);
             updateDisplay();
         }
         
@@ -447,9 +455,18 @@
             localStorage.setItem('money', money);
             localStorage.setItem('experience', experience);
             localStorage.setItem('tapValue', tapValue);
+            localStorage.setItem('isAdvancedUpgrade', isAdvancedUpgrade);
+            localStorage.setItem('upgradeCost', upgradeCost);
         }
         
         function updateDisplay() {
+            // Проверяем, нужно ли переключить на улучшенный апгрейд
+            if (experience >= 1000 && !isAdvancedUpgrade) {
+                isAdvancedUpgrade = true;
+                upgradeCost = 10000;
+                upgradeBtn.innerText = 'Хомякакого +500 опыта (10000 коинов)';
+            }
+            
             document.getElementById('money').innerText = Math.floor(money);
             document.getElementById('experience').innerText = Math.floor(experience);
             
@@ -460,8 +477,11 @@
             }
             
             // Обновляем текст кнопки с текущей стоимостью
-            document.getElementById('upgrade-btn').innerText = 
-                `Щавельский +5 к тапу (${upgradeCost} коинов)`;
+            if (isAdvancedUpgrade) {
+                upgradeBtn.innerText = `Хомякакого +500 опыта (${upgradeCost} коинов)`;
+            } else {
+                upgradeBtn.innerText = `Щавельский +5 к тапу (${upgradeCost} коинов)`;
+            }
         }
         
         function showNotification(message) {
@@ -487,10 +507,17 @@
         function buyUpgrade() {
             if (money >= upgradeCost) {
                 money -= upgradeCost;
-                tapValue += 5;
-                experience += 5;
+                
+                if (isAdvancedUpgrade) {
+                    experience += 500;
+                    showNotification(`Улучшение куплено! +500 опыта (Всего: ${Math.floor(experience)})`);
+                } else {
+                    tapValue += 5;
+                    experience += 5;
+                    showNotification(`Улучшение куплено! +5 к тапу (Всего: ${tapValue})`);
+                }
+                
                 updateDisplay();
-                showNotification(`Улучшение куплено! +5 к тапу (Всего: ${tapValue})`);
             } else {
                 showNotification("Недостаточно коинов!");
             }
