@@ -4,94 +4,397 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hamster Combat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #FF9500;
+            --secondary: #FFD700;
+            --dark: #1A1A1A;
+            --light: #F5F5F5;
+            --accent: #FF3B30;
+            --success: #34C759;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            background-color: #333;
-            font-family: Arial, sans-serif;
-            color: white;
+            background-color: var(--dark);
+            background-image: radial-gradient(circle at 50% 50%, #2a2a2a 0%, #1A1A1A 100%);
+            font-family: 'Roboto', sans-serif;
+            color: var(--light);
+            text-align: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+        
+        #user-name {
+            position: fixed;
+            top: 15px;
+            left: 20px;
+            font-size: 16px;
+            color: var(--secondary);
+            font-family: 'Press Start 2P', cursive;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        
+        .header {
+            margin: 40px 0 20px;
             text-align: center;
         }
-        #user-name {
+        
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 149, 0, 0.7);
+            letter-spacing: 2px;
+        }
+        
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-container::before {
+            content: "";
             position: absolute;
-            top: 10px;
-            left: 20px;
-            font-size: 24px;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 20px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--primary));
+            z-index: -1;
+            animation: borderGlow 3s linear infinite;
+            opacity: 0.7;
         }
+        
+        @keyframes borderGlow {
+            0% { filter: blur(5px); opacity: 0.7; }
+            50% { filter: blur(8px); opacity: 0.4; }
+            100% { filter: blur(5px); opacity: 0.7; }
+        }
+        
         #coin-image {
-            width: 100px;
-            height: 100px;
-            margin: 20px;
-        }
-        #upgrades {
-            margin-top: 20px;
-        }
-        #upgrade-btn {
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 18px;
+            width: 150px;
+            height: 150px;
+            margin: 20px 0;
             cursor: pointer;
+            transition: all 0.2s ease;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
+        }
+        
+        #coin-image:hover {
+            transform: scale(1.05);
+        }
+        
+        #coin-image:active {
+            transform: scale(0.95);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin: 20px 0;
+            background: rgba(40, 40, 40, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 149, 0, 0.3);
+        }
+        
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--secondary);
+            margin-top: 5px;
+            font-family: 'Press Start 2P', cursive;
+        }
+        
+        #upgrades {
+            width: 100%;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        #upgrades h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.2rem;
+        }
+        
+        #upgrade-btn {
+            background: linear-gradient(135deg, var(--primary), #FF7B00);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 149, 0, 0.4);
+            width: 100%;
+            max-width: 400px;
+            margin: 10px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #upgrade-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 149, 0, 0.6);
+        }
+        
+        #upgrade-btn:active {
+            transform: translateY(1px);
+        }
+        
+        #upgrade-btn::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0) 45%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 55%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            20% { transform: translateX(100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+        
+        #airdrop {
+            margin-top: 30px;
+        }
+        
+        #airdrop a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: 1px solid var(--secondary);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        #airdrop a:hover {
+            background-color: rgba(255, 215, 0, 0.1);
+            transform: scale(1.05);
+        }
+        
+        .click-effect {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.7;
+            animation: clickAnimation 0.5s forwards;
+            z-index: 100;
+        }
+        
+        @keyframes clickAnimation {
+            0% { transform: scale(0); opacity: 0.7; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .game-container {
+                padding: 20px;
+            }
+            
+            #user-name {
+                font-size: 12px;
+                top: 10px;
+                left: 10px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="user-name">Пользователь: МеллКаллСтрой</div>
-    <h1>Hamster Combat</h1>
-    <img id="coin-image" src="hamstercoin.webp" alt="Hamster Coin">
-    <div>
-        <p>Деньги: <span id="money">0</span></p>
-        <p>Опыт: <span id="experience">0</span></p>
+    <div id="user-name">Игрок: МеллКаллСтрой</div>
+    
+    <div class="header">
+        <h1>HAMSTER COMBAT</h1>
     </div>
-
-    <div id="upgrades">
-        <h2>Обгрейды:</h2>
-        <button id="upgrade-btn" onclick="buyUpgrade()">Щавельский + 5 тапа (100 коинов)</button>
+    
+    <div class="game-container">
+        <img id="coin-image" src="hamstercoin.webp" alt="Hamster Coin">
+        
+        <div class="stats">
+            <div class="stat">
+                <span>Деньги</span>
+                <span class="stat-value" id="money">0</span>
+            </div>
+            <div class="stat">
+                <span>Опыт</span>
+                <span class="stat-value" id="experience">0</span>
+            </div>
+        </div>
+        
+        <div id="upgrades">
+            <h2>УЛУЧШЕНИЯ</h2>
+            <button id="upgrade-btn" onclick="buyUpgrade()">Щавельский +5 к тапу (100 коинов)</button>
+        </div>
     </div>
-
+    
     <div id="airdrop">
-        <a href="airdrop.html">air drop</a>
+        <a href="airdrop.html">AIR DROP 🎁</a>
     </div>
+    
+    <div id="notification" class="notification"></div>
 
     <script>
         // Получение сохраненных данных из localStorage или установка значений по умолчанию
         let money = Number(localStorage.getItem('money')) || 0;
         let experience = Number(localStorage.getItem('experience')) || 0;
         let tapValue = Number(localStorage.getItem('tapValue')) || 1;
-        const upgradeCost = 20;
-
+        const upgradeCost = 100;
+        
+        // Элементы DOM
+        const coinImage = document.getElementById('coin-image');
+        const notification = document.getElementById('notification');
+        
         function updateDisplay() {
-            document.getElementById('money').innerText = money;
-            document.getElementById('experience').innerText = experience;
+            document.getElementById('money').innerText = Math.floor(money);
+            document.getElementById('experience').innerText = Math.floor(experience);
             localStorage.setItem('money', money);
             localStorage.setItem('experience', experience);
             localStorage.setItem('tapValue', tapValue);
+            
+            // Обновляем текст кнопки с текущей стоимостью
+            document.getElementById('upgrade-btn').innerText = 
+                `Щавельский +5 к тапу (${upgradeCost} коинов)`;
         }
-
+        
+        function showNotification(message) {
+            notification.innerText = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        function createClickEffect(x, y) {
+            const effect = document.createElement('div');
+            effect.className = 'click-effect';
+            effect.style.left = `${x - 15}px`;
+            effect.style.top = `${y - 15}px`;
+            document.body.appendChild(effect);
+            
+            setTimeout(() => {
+                effect.remove();
+            }, 500);
+        }
+        
         function buyUpgrade() {
             if (money >= upgradeCost) {
                 money -= upgradeCost;
-                tapValue += 100;
-                experience += 5; // бонус за покупку
+                tapValue += 5;
+                experience += 5;
                 updateDisplay();
-                alert("Вы купили обгрейд! Теперь у вас " + tapValue + " тапа(ов).");
+                showNotification(`Улучшение куплено! +5 к тапу (Всего: ${tapValue})`);
             } else {
-                alert("Недостаточно денег!");
+                showNotification("Недостаточно коинов!");
             }
         }
-
-        // Для тестирования, добавляем функцию для получения денег при нажатии
-        document.body.addEventListener('click', () => {
+        
+        // Обработчик клика по монетке
+        coinImage.addEventListener('click', (e) => {
             money += tapValue;
+            experience += 0.1;
+            createClickEffect(e.clientX, e.clientY);
             updateDisplay();
+            
+            // Анимация монетки при клике
+            coinImage.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                coinImage.style.transform = 'scale(1)';
+            }, 100);
         });
-
+        
+        // Общий обработчик клика по странице (для тестирования)
+        document.addEventListener('click', (e) => {
+            if (e.target !== coinImage && e.target !== document.getElementById('upgrade-btn')) {
+                money += tapValue;
+                experience += 0.1;
+                updateDisplay();
+            }
+        });
+        
+        // Инициализация
         updateDisplay();
+        
+        // Авто-кликер (для демонстрации)
+        // setInterval(() => {
+        //     money += tapValue / 10;
+        //     experience += 0.01;
+        //     updateDisplay();
+        // }, 1000);
     </script>
 
 </body>
