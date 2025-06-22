@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamster Criminal Info</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6a1b9a;
+            --secondary: #ff9800;
+            --dark: #121212;
+            --light: #f5f5f5;
+            --accent: #00e676;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(106, 27, 154, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255, 152, 0, 0.2) 0%, transparent 50%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .hello, .information {
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            font-size: 2.2rem;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--primary), #9c27b0);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(106, 27, 154, 0.4);
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(106, 27, 154, 0.6);
+            background: linear-gradient(135deg, #7b1fa2, #ab47bc);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .highlight {
+            color: var(--accent);
+            font-weight: 700;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .hello, .information {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hello">
+            <h1>Привет, соучастник!</h1>
+            <p>Спасибо за использование нашей игры <span class="highlight">Hamster Criminal!</span><br>Данная игра является шуткой, деньги можно вывести в момент "air-drop", информация о нём будет опубликована в телеграмм канале.</p>
+            <p>Если вы в первый раз или хотите продолжить играть, переходите по кнопке снизу.</p>
+            <a href="game.html"><button>Начать играть</button></a>
+        </div>
+        <div class="information">
+            <h1>Информационная страница</h1>
+            <p>Здесь будет размещена дополнительная информация о проекте, правилах и обновлениях.</p>
+        </div>
+    </div>
+</body>
+</html>
